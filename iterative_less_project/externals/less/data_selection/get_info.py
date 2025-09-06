@@ -97,7 +97,9 @@ def main():
                 proj_dim=args.gradient_projection_dimension, 
                 gradient_type=args.gradient_type, 
                 adam_optimizer_state=adam_param_states, 
-                max_samples=args.max_samples
+                max_samples=args.max_samples,
+                progress=progress,
+                progress_every=200
             )
         
         progress.log("✅ All steps completed successfully!")

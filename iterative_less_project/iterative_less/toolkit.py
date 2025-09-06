@@ -34,9 +34,27 @@ def _run_command_final(command: str, description: str, is_gpu_intensive: bool = 
     logger.info(f"即将执行 [{description}]...")
     logger.debug(f"完整命令:\n---\n{command.strip()}\n---")
     
+    # 为避免在长任务中因大量stdout/stderr输出（例如tqdm）导致管道缓冲区填满而引发的子进程阻塞：
+    # 当使用进度文件监控(use_progress_log=True)时，将子进程的输出重定向到磁盘日志文件，而不是PIPE。
+    stdout_handle = None
+    stderr_handle = None
+    stdout_path = None
+    stderr_path = None
+    if use_progress_log:
+        ts = int(time.time())
+        stdout_path = os.path.join(config.ITERATIVE_OUTPUT_DIR, f"subprocess_{ts}_{os.getpid()}.stdout.log")
+        stderr_path = os.path.join(config.ITERATIVE_OUTPUT_DIR, f"subprocess_{ts}_{os.getpid()}.stderr.log")
+        os.makedirs(config.ITERATIVE_OUTPUT_DIR, exist_ok=True)
+        stdout_handle = open(stdout_path, 'w', encoding='utf-8', buffering=1)
+        stderr_handle = open(stderr_path, 'w', encoding='utf-8', buffering=1)
+        popen_kwargs = dict(stdout=stdout_handle, stderr=stderr_handle)
+    else:
+        popen_kwargs = dict(stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
     process = subprocess.Popen(
-        command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        text=True, encoding='utf-8', cwd=config.PROJECT_ROOT
+        command, shell=True,
+        text=True, encoding='utf-8', cwd=config.PROJECT_ROOT,
+        **popen_kwargs
     )
 
     try:
@@ -60,38 +78,76 @@ def _run_command_final(command: str, description: str, is_gpu_intensive: bool = 
                 time.sleep(1) # 降低轮询频率
             print() # 进度条结束后换行
 
-        # 通信阶段：等待进程结束，然后一次性、安全地读取所有输出
-        stdout, stderr = process.communicate()
+        if use_progress_log:
+            # 使用文件重定向时，等待进程结束即可，然后提示日志位置
+            ret = process.wait()
+            # 关闭文件句柄以刷新内容
+            try:
+                if stdout_handle: stdout_handle.close()
+            finally:
+                pass
+            try:
+                if stderr_handle: stderr_handle.close()
+            finally:
+                pass
 
-        # 日志记录阶段
-        if stdout:
-            logger.info(f"--- 子进程 STDOUT [{description}] ---")
-            for line in stdout.strip().split('\n'):
-                logger.info(line)
-        
-        if process.returncode != 0:
-            logger.error(f"命令 [{description}] 执行失败，返回码: {process.returncode}。")
+            if ret != 0:
+                logger.error(f"命令 [{description}] 执行失败，返回码: {ret}。")
+                if stderr_path and os.path.exists(stderr_path):
+                    # 打印最后若干行便于定位
+                    try:
+                        with open(stderr_path, 'r', encoding='utf-8') as f:
+                            tail = f.readlines()[-50:]
+                        logger.error(f"--- 子进程 STDERR 结尾 [{description}] ---\n" + "".join(tail))
+                    except Exception:
+                        pass
+                raise subprocess.CalledProcessError(ret, command)
+
+            logger.info(f"✅ 命令 [{description}] 执行成功。日志: stdout -> {stdout_path}, stderr -> {stderr_path}")
+        else:
+            # 通信阶段：等待进程结束，然后一次性、安全地读取所有输出
+            stdout, stderr = process.communicate()
+
+            # 日志记录阶段
+            if stdout:
+                logger.info(f"--- 子进程 STDOUT [{description}] ---")
+                for line in stdout.strip().split('\n'):
+                    logger.info(line)
+            
+            if process.returncode != 0:
+                logger.error(f"命令 [{description}] 执行失败，返回码: {process.returncode}。")
+                if stderr:
+                    logger.error(f"--- 子进程 STDERR [{description}] ---")
+                    for line in stderr.strip().split('\n'):
+                        logger.error(line)
+                raise subprocess.CalledProcessError(process.returncode, command)
+            
+            # 如果有stderr但返回码为0，通常是警告信息（例如tqdm进度条）
             if stderr:
-                logger.error(f"--- 子进程 STDERR [{description}] ---")
+                logger.debug(f"--- 子进程 STDERR (警告/调试信息) [{description}] ---")
                 for line in stderr.strip().split('\n'):
-                    logger.error(line)
-            raise subprocess.CalledProcessError(process.returncode, command)
-        
-        # 如果有stderr但返回码为0，通常是警告信息（例如tqdm进度条）
-        if stderr:
-            logger.debug(f"--- 子进程 STDERR (警告/调试信息) [{description}] ---")
-            for line in stderr.strip().split('\n'):
-                logger.debug(line)
+                    logger.debug(line)
 
-        logger.info(f"✅ 命令 [{description}] 执行成功。")
+            logger.info(f"✅ 命令 [{description}] 执行成功。")
 
     finally:
-        # 清理进度文件
+        # 清理进度文件与句柄
         if use_progress_log and progress_log_file and os.path.exists(progress_log_file):
             try:
                 os.remove(progress_log_file)
             except OSError:
                 pass
+        # 句柄兜底关闭
+        try:
+            if stdout_handle and not stdout_handle.closed:
+                stdout_handle.close()
+        except Exception:
+            pass
+        try:
+            if stderr_handle and not stderr_handle.closed:
+                stderr_handle.close()
+        except Exception:
+            pass
 
 # --- 为了兼容性，保留旧的函数名，但都指向新的、健壮的实现 ---
 def _run_command(command: str, description: str, is_gpu_intensive: bool = True):

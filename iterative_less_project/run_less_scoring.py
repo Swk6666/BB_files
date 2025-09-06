@@ -62,7 +62,8 @@ def main():
         data_file=temp_less_input_file,
         num_samples=num_samples,
         output_path=train_grad_output_path,
-        grad_type="sgd",
+        # 候选数据池梯度必须使用 Adam 影响力梯度
+        grad_type="adam",
         is_lora=True,
         base_model_path=config.BASE_MODEL_NAME
     )

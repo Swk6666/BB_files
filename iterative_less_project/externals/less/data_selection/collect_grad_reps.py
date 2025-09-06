@@ -16,12 +16,21 @@ def get_number_of_params(model):
     logger.info(f"模型可训练参数数量: {num_params}")
     return num_params
 
-def collect_grads(data_iterable: Iterable, model, output_dir: str, proj_dim: List[int] = [8192],
-                  adam_optimizer_state: Optional[dict] = None, gradient_type: str = "adam",
-                  max_samples: Optional[int] = None):
+def collect_grads(
+    data_iterable: Iterable,
+    model,
+    output_dir: str,
+    proj_dim: List[int] = [8192],
+    adam_optimizer_state: Optional[dict] = None,
+    gradient_type: str = "adam",
+    max_samples: Optional[int] = None,
+    progress=None,
+    progress_every: int = 200,
+):
     model_id = 0
     torch.random.manual_seed(0)
     
+    # 小批投影批次，用于限制一次性显存占用（仅在需要时使用）
     CHUNK_SIZE = 8
     device = next(model.parameters()).device
     number_of_params = get_number_of_params(model)
@@ -40,10 +49,21 @@ def collect_grads(data_iterable: Iterable, model, output_dir: str, proj_dim: Lis
         if m_global.numel() != number_of_params or v_global.numel() != number_of_params: raise RuntimeError("Reconstructed Adam moment vectors' size does not match model's trainable parameters.")
         logger.info(f"✅ 全局 m 和 v 向量准备完毕。")
 
-    projectors = {dim: CudaProjector(grad_dim=number_of_params, proj_dim=dim, seed=0, device=device, dtype=torch.float32, proj_type=ProjectionType.rademacher, max_batch_size=CHUNK_SIZE) for dim in proj_dim}
+    projectors = {
+        dim: CudaProjector(
+            grad_dim=number_of_params,
+            proj_dim=dim,
+            seed=0,
+            device=device,
+            dtype=torch.float32,
+            proj_type=ProjectionType.rademacher,
+            max_batch_size=CHUNK_SIZE,
+        )
+        for dim in proj_dim
+    }
 
+    # 存储的是“已投影”的梯度（低维），而不是全量梯度，避免CPU/GPU来回拷贝巨量数据
     all_projected_grads = {dim: [] for dim in proj_dim}
-    full_grads_cpu_buffer = []
     model.train()
     
     count = 0
@@ -53,8 +73,14 @@ def collect_grads(data_iterable: Iterable, model, output_dir: str, proj_dim: Lis
     if max_samples is not None: total_samples = min(max_samples, total_samples) if total_samples != -1 else max_samples
 
     # --- 【核心修复】 ---
-    # 循环的单位是“批次”(batch)，而不是“样本”(sample)
-    for batch in tqdm(data_iterable, desc="Computing Gradients", total=len(data_iterable)):
+    # 逐“批次”（对预加载列表即单样本）在GPU上直接完成投影，仅将小尺寸投影结果转回CPU
+    for batch in tqdm(
+        data_iterable,
+        desc="Computing Gradients",
+        total=len(data_iterable),
+        mininterval=1.0,
+        miniters=100,
+    ):
         if max_samples is not None and count >= max_samples: break
         
         # 兼容两种数据源：
@@ -77,7 +103,7 @@ def collect_grads(data_iterable: Iterable, model, output_dir: str, proj_dim: Lis
         count += batch['input_ids'].shape[0] # 按实际batch大小增加计数
         # --- 【修复结束】 ---
 
-        model.zero_grad()
+        model.zero_grad(set_to_none=True)
         loss = model(**batch).loss
 
         if torch.isinf(loss) or torch.isnan(loss):
@@ -88,7 +114,10 @@ def collect_grads(data_iterable: Iterable, model, output_dir: str, proj_dim: Lis
         loss.backward()
 
         with torch.no_grad():
-            vectorized_grads = torch.cat([p.grad.view(-1) for p in model.parameters() if p.requires_grad])
+            # 在GPU上向量化梯度，避免先转CPU再回传GPU造成的巨大带宽压力
+            vectorized_grads = torch.cat(
+                [p.grad.view(-1) for p in model.parameters() if p.requires_grad]
+            )
 
         if torch.isinf(vectorized_grads).any() or torch.isnan(vectorized_grads).any():
             logger.warning(f"样本 {count} 的原始梯度包含 NaN/Inf，已跳过。")
@@ -104,17 +133,27 @@ def collect_grads(data_iterable: Iterable, model, output_dir: str, proj_dim: Lis
             denom = torch.nan_to_num(denom, nan=0.0, posinf=1e9)
             denom += eps
             adam_influence_grads = m_t / denom
-            adam_influence_grads = torch.nan_to_num(adam_influence_grads, nan=0.0, posinf=0.0, neginf=0.0)
+            adam_influence_grads = torch.nan_to_num(
+                adam_influence_grads, nan=0.0, posinf=0.0, neginf=0.0
+            )
             vectorized_grads = adam_influence_grads.to(model.dtype)
-        
-        full_grads_cpu_buffer.append(vectorized_grads.cpu())
 
-        if len(full_grads_cpu_buffer) == CHUNK_SIZE or (count >= total_samples and full_grads_cpu_buffer):
-            grads_tensor_chunk = torch.stack(full_grads_cpu_buffer).to(torch.float32)
-            for dim, projector in projectors.items():
-                projected_chunk = projector.project(grads_tensor_chunk.to(device), model_id=model_id)
-                all_projected_grads[dim].append(projected_chunk.cpu().to(torch.bfloat16))
-            full_grads_cpu_buffer = []
+        # 直接在GPU上对“单样本”做随机投影，仅回传低维结果
+        vec_for_proj = vectorized_grads.detach().to(torch.float32).unsqueeze(0)
+        for dim, projector in projectors.items():
+            projected = projector.project(vec_for_proj, model_id=model_id)  # [1, dim] on GPU
+            all_projected_grads[dim].append(projected.cpu().to(torch.bfloat16))
+
+        # 适度释放中间变量，降低峰值占用
+        del loss, vectorized_grads
+        if count % 512 == 0:
+            torch.cuda.empty_cache()
+        # 进度心跳，避免上层感知不到进展
+        if progress is not None and count % progress_every == 0:
+            try:
+                progress.log(f"Processed {count} / {total_samples if total_samples!=-1 else '?'} samples during gradient computation")
+            except Exception:
+                pass
         
     torch.cuda.empty_cache()
     
