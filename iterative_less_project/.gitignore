@@ -1,0 +1,8 @@
+# 忽略所有 .jsonl 文件
+*.jsonl
+*.txt
+*.csv
+*.json*.txt
+*.json
+*.jsonl
+*.csv

@@ -1,0 +1,204 @@
+﻿Which one of the following is the most appropriate definition of a 99% confidence interval?,"99% of the time in repeated samples, the interval would contain the true value of the parameter","99% of the time in repeated samples, the interval would contain the estimated value of the parameter","99% of the time in repeated samples, the null hypothesis will be rejected","99% of the time in repeated samples, the null hypothesis will not be rejected when it was false",A
+What is the main difference between the Dickey Fuller (DF) and Phillips-Perron (PP) approaches to unit root testing?,ADF is a single equation approach to unit root testing while PP is a systems approach,PP tests reverse the DF null and alternative hypotheses so that there is stationarity under the null hypothesis of the PP test,The PP test incorporates an automatic correction for autocorrelated residuals in the test regression,PP tests have good power in small samples whereas DF tests do not.,C
+"If there were a leverage effect in practice, what would be the shape of the news impact curve for as model that accounted for that leverage?",It would rise more quickly for negative disturbances than for positive ones of the same magnitude,It would be symmetrical about zero,It would rise less quickly for negative disturbances than for positive ones of the same magnitude,It would be zero for all positive disturbances,A
+Which of the following statements is false concerning the linear probability model?,There is nothing in the model to ensure that the estimated probabilities lie between zero and one,"Even if the probabilities are truncated at zero and one, there will probably be many observations for which the probability is either exactly zero or exactly one",The error terms will be heteroscedastic and not normally distributed,The model is much harder to estimate than a standard regression model with a continuous dependent variable,D
+Which of the following statements concerning the regression population and sample is FALSE?,The population is the total collection of all items of interest,The population can be infinite,"In theory, the sample could be larger than the population",A random sample is one where each individual item from the population is equally likely to be drawn.,C
+Which of the following statements is INCORRECT concerning a comparison of the Box-Pierce Q and the Ljung-Box Q* statistics for linear dependence in time series?,"Asymptotically, the values of the two test statistics will be equal",The Q test has better small-sample properties than the Q*,The Q test is sometimes over-sized for small samples,"As the sample size tends towards infinity, both tests will show a tendency to always reject the null hypothesis of zero autocorrelation coefficients.",B
+A parsimonious model is one that,Includes too many variables,Includes as few variables as possible to explain the data,Is a well-specified model,Is a mis-specified model,A
+Which of the following is NOT a feature of continuously compounded returns (i.e. log-returns)?,They can be interpreted as continuously compounded changes in the prices,They can be added over time to give returns for longer time periods,They can be added across a portfolio of assets to give portfolio returns,They are usually fat-tailed,C
+"Which of the following features of financial asset return time-series could be captured using a standard GARCH(1,1) model?
+
+i) Fat tails in the return distribution
+
+
+ii) Leverage effects
+
+
+iii) Volatility clustering
+
+
+iv) Volatility affecting returns",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",B
+"Consider the estimation of a GARCH-M model. If the data employed were a time-series of daily corporate bond percentage returns, which of the following would you expect the value of the GARCH-in-mean parameter estimate to be?",Less than -1,Between -1 and 0,Between 0 and 1,Bigger than 1,C
+"Under which of the following situations would bootstrapping be preferred to pure simulation?
+
+i) If it is desired that the distributional properties of the data in the experiment
+
+are the same as those of some actual data
+
+
+ii) If it is desired that the distributional properties of the data in the experiment
+
+are known exactly
+
+
+iii) If the distributional properties of the actual data are unknown
+
+
+iv) If the sample of actual data available is very small",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iv) only","(i), (ii), (iii), and (iv)",B
+"Which of the following may be consequences of one or more of the CLRM assumptions being violated?
+
+i) The coefficient estimates are not optimal
+
+
+ii) The standard error estimates are not optimal
+
+
+iii) The distributions assumed for the test statistics are inappropriate
+
+
+iv) Conclusions regarding the strength of relationships between the dependent
+
+and independent variables may be invalid.",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",D
+Which of the following statements is true concerning forecasting in econometrics?,Forecasts can only be made for time-series data,Mis-specified models are certain to produce inaccurate forecasts,Structural forecasts are simpler to produce than those from time series models,In-sample forecasting ability is a poor test of model adequacy,D
+The pacf is necessary for distinguishing between,An AR and an MA model,An AR and an ARMA model,An MA and an ARMA model,Different models from within the ARMA family,B
+Negative residual autocorrelation is indicated by which one of the following?,A cyclical pattern in the residuals,An alternating pattern in the residuals,A complete randomness in the residuals,Residuals that are all close to zero,B
+"Which of the following statements are true concerning a comparison between ARCH(q) and GARCH(1,1) models?
+
+i) The ARCH(q) model is likely to be the more parsimonious
+
+
+ii) The ARCH(q) model is the more likely to violate non-negativity constraints
+
+
+iii) The ARCH(q) model can allow for an infinite number of previous lags of squared
+
+returns to affect the current conditional variance
+
+
+iv) The GARCH(1,1) model will usually be sufficient to capture all of the dependence
+
+in the conditional variance",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",A
+"Which of the following statements are true concerning a triangular or recursive system?
+
+i) The parameters can be validly estimated using separate applications of OLS to
+
+each equation
+
+
+ii) The independent variables may be correlated with the error terms in other
+
+equations
+
+
+iii) An application of 2SLS would lead to unbiased but inefficient parameter estimates
+
+
+iv) The independent variables may be correlated with the error terms in the equations
+
+in which they appear as independent variables",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",C
+Which one of the following statements best describes the algebraic representation of the fitted regression line?,\hat{y}_t = \hat{\alpha} + \hat{\beta}x_t + \hat{u}_t,\hat{y}_t = \hat{\alpha} + \hat{\beta}x_t,\hat{y}_t = \hat{\alpha} + \hat{\beta}x_t + u_t,y_t = \hat{\alpha} + \hat{\beta}x_t + \hat{u}_t,B
+What are the dimensions of $\hat{u}^t \hat{u}?,T x k,T x 1,k x 1,1 x 1,D
+"The characteristic roots of the MA process
+
+$y_t = -3u_{t-1} + u_{t-2} + u_t$
+
+are",1 and 2,1 and 0.5,2 and -0.5,1 and -3,B
+Which of the following is an equivalent expression for saying that the explanatory variable is "non-stochastic"?,The explanatory variable is partly random,The explanatory variable is fixed in repeated samples,The explanatory variable is correlated with the errors,The explanatory variable always has a value of one,B
+Suppose that the Durbin Watson test is applied to a regression containing two explanatory variables plus a constant with 50 data points. The test statistic takes a value of 1.53. What is the appropriate conclusion?,Residuals appear to be positively autocorrelated,Residuals appear to be negatively autocorrelated,Residuals appear not to be autocorrelated,The test result is inconclusive,D
+"If OLS is used in the presence of autocorrelation, which of the following will be likely consequences?
+
+i) Coefficient estimates may be misleading
+
+
+ii) Hypothesis tests could reach the wrong conclusions
+
+
+iii) Forecasts made from the model could be biased
+
+
+iv) Standard errors may inappropriate",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",A
+What will be the properties of the OLS estimator in the presence of multicollinearity?,"It will be consistent, unbiased and efficient",It will be consistent and unbiased but not efficient,It will be consistent but not unbiased,It will not be consistent,A
+Which one of the following would NOT be a consequence of using non-stationary data in levels form?,The regression $R^2$ may be spuriously high,Test statistics may not follow standard distributions,Statistical inferences may be invalid,Parameter estimates may be biased,D
+"If a series, y, follows a random walk, what is the optimal one-step ahead forecast of y?",The current value of y,Zero,One,The average value of y over the in-sample period,A
+The order condition is,A necessary and sufficient condition for identification,A necessary but not sufficient condition for identification,A sufficient but not necessary condition for identification,A condition that is nether necessary nor sufficient for identification,B
+"If an estimator is said to have minimum variance, which of the following statements is NOT implied?",The probability that the estimate is a long way away from its true value is minimised,The estimator is efficient,Such an estimator would be termed "best",Such an estimator will always be unbiased,D
+"Which of the following are disadvantages of the Dickey-Fuller / Engle-Granger approach to testing for cointegration and modelling cointegrating relationships?
+
+i) Only one cointegrating relationship can be estimated
+
+ii) Particularly for small samples. There is a high chance of the tests suggestingthat variables are not cointegrated when they are
+
+iii) It is not possible to make inferences on the cointegrating regression
+
+iv) The procedure forces the researcher to specify which is the dependent variable and which are the independent variables.",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",D
+Which of the following statements is true concerning the population regression function (PRF) and sample regression function (SRF)?,The PRF is the estimated model,The PRF is used to infer likely values of the SRF,Whether the model is good can be determined by comparing the SRF and the PRF,The PRF is a description of the process thought to be generating the data.,D
+"Which one of the following is a disadvantage of the general to specific or ""LSE"" (""Hendry"") approach to building econometric models, relative to the specific to general approach?",Some variables may be excluded at the first stage leading to coefficient biases,The final model may lack theoretical interpretation,The final model may be statistically inadequate,"If the initial model is mis-specified, all subsequent steps will be invalid.",B
+"Which of the following statements are true concerning maximum likelihood (ML) estimation in the context of GARCH models?
+
+i) Maximum likelihood estimation selects the parameter values that maximise the
+
+probability that we would have actually observed the values of the series y that we
+
+actually did.
+
+
+ii) GARCH models can only be estimated by ML and not by OLS
+
+
+iii) For estimation of a standard linear model (with no GARCH), the OLS and ML
+
+estimates for the slope and intercept parameters will be identical but the estimator
+
+for the variance of the disturbances is slightly different
+
+
+iv) Most computer packages use numerical procedures to estimate GARCH models
+
+rather than a set of analytical formulae",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",D
+Including relevant lagged values of the dependent variable on the right hand side of a regression equation could lead to which one of the following?,Biased but consistent coefficient estimates,Biased and inconsistent coefficient estimates,Unbiased but inconsistent coefficient estimates,Unbiased and consistent but inefficient coefficient estimates.,A
+Which one of the following factors is likely to lead to a relatively high degree of out-of-sample forecast accuracy?,A model that is based on financial theory,A model that contains many variables,A model whose dependent variable has recently exhibited a structural change,A model that is entirely statistical in nature with no room for judgmental modification of forecasts,A
+"Which of the following are plausible approaches to dealing with residual autocorrelation?
+
+i) Take logarithms of each of the variables
+
+ii) Add lagged values of the variables to the regression equation
+
+iii) Use dummy variables to remove outlying observations
+
+iv) Try a model in first differenced form rather than in levels.",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",A
+For an autoregressive process to be considered stationary,The roots of the characteristic equation must all lie inside the unit circle,The roots of the characteristic equation must all lie on the unit circle,The roots of the characteristic equation must all lie outside the unit circle,The roots of the characteristic equation must all be less than one in absolute value,C
+"Which of the following statements are true concerning information criteria?
+
+(i) Adjusted R-squared is an information criterion
+
+(ii) If the residual sum of squares falls when an additional term is added, the value of the information criterion will fall
+
+(iii) Akaike's information criterion always leads to model orders that are at least as large as those of Schwarz's information criterion
+
+(iv) Akaike's information criterion is consistent",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",B
+The "within transform" involves,Taking the average values of the variables,Subtracting the mean of each entity away from each observation on that entity,Estimating a panel data model using least squares dummy variables,Using both time dummies and cross-sectional dummies in a fixed effects panel model,B
+The purpose of "augmenting" the Dickey-Fuller test regression is to,Ensure that there is no heteroscedasticity in the test regression residuals.,Ensure that the test regression residuals are normally distributed,Ensure that there is no autocorrelation in the test regression residuals,Ensure that all of the non-stationarity is taken into account.,C
+"If a series, y, follows a random walk with drift b, what is the optimal one-step ahead forecast of the change in y?",The current value of y,Zero,One,The average value of the change in y over the in-sample period,D
+"Which of the following are plausible approaches to dealing with a model that exhibits heteroscedasticity?
+
+i) Take logarithms of each of the variables
+
+ii) Use suitably modified standard errors
+
+iii) Use a generalised least squares procedure
+
+iv) Add lagged values of the variables to the regression equation.",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",C
+"Which of the following statements are true concerning the standardised residuals (residuals divided by their respective conditional standard deviations) from an estimated GARCH model?
+
+i) They are assumed to be normally distributed
+
+
+ii) Their squares will be related to their lagged squared values if the GARCH model is
+
+appropriate
+
+
+iii) In practice, they are likely to have fat tails
+
+
+iv) If the GARCH model is adequate, the standardised residuals and the raw residuals
+
+will be identical",(ii) and (iv) only,(i) and (iii) only,"(i), (ii), and (iii) only","(i), (ii), (iii), and (iv)",B
+Which one of the following statements is true concerning VARs?,The coefficient estimates have intuitive theoretical interpretations,The coefficient estimates usually have the same sign for all of the lags of a given variable in a given equation,VARs often produce better forecasts than simultaneous equation structural models,All of the components of a VAR must be stationary before it can be used for forecasting,C
+Which of the following statements is INCORRECT concerning the classical hypothesis testing framework?,"If the null hypothesis is rejected, the alternative is accepted",The null hypothesis is the statement being tested while the alternative encompasses the remaining outcomes of interest,The test of significance and confidence interval approaches will always give the same conclusions,Hypothesis tests are used to make inferences about the population parameters.,A
+"An ARMA(p,q) (p, q are integers bigger than zero) model will have",An acf and pacf that both decline geometrically,An acf that declines geometrically and a pacf that is zero after p lags,An acf that declines geometrically and a pacf that is zero after q lags,An acf that is zero after p lags and a pacf that is zero after q lags,A
+"Suppose that the following regression is estimated using 27 quarterly observations:
+
+$y_t = \beta_1 + \beta_2 x_2 + \beta_3 x_{3t} + u_t$
+
+What is the appropriate critical value for a 2-sided 5% size of test of $H_0: \beta_3 = 1$?",1.64,1.71,2.06,1.96,C

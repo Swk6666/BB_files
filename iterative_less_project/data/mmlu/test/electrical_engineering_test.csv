@@ -1,0 +1,46 @@
+﻿The Barkhausen criterion for an oscillator,Loop gain should be unity,Loop gain should be less than unity,The phase of a feedback signal with respect to input should be 0～ or 360～,Both A and C,D
+Potentiometer method of DC voltage measurement is more accurate than direct measurement using a voltmeter because,It loads the circuit moderately.,It loads the circuit to maximum extent.,It uses centre zero galvanometer instead of voltmeter.,It does not load the circuit at all.,D
+Which of these sets of logic gates are designated as universal gates?,"NOR, NAND.","XOR, NOR, NAND.","OR, NOT, AND.","NOR, NAND, XNOR.",A
+"A single phase one pulse controlled circuit has a resistance R and counter emf E load 400 sin(314 t) as the source voltage. For a load counter emf of 200 V, the range of firing angle control is",30～ to 150～.,30～ to 180～.,60～ to 120～.,60～ to 180～.,A
+A box which tells the effect of inputs on control sub system is known as,Data Box.,Logical box.,Decision box.,State box.,C
+Two infinite parallel metal plates are charged with equal surface charge density of the same polarity. The electric field in the gap between the plates is,same as that produced by one plate.,double the field produced by one plate.,dependent on coordinates of field points.,zero.,D
+The resistance in the circuit of the moving coil of a dynamometer wattmeter should be,Low.,Very low.,High.,Almost zero.,C
+The following are the necessary requirements of an oscillator,Amplitude stability,Frequency stability,Power stability,Both A and B,D
+The normal voltage used in directional heating is,1.5 KV.,15 KV.,33 KV.,66 KV.,A
+LC oscillators are used for produce a waveform with frequency ranging from,1MHz to 500 MHz,100 KHz to 500 MHz,1 KHz to 1 MHz,1MHz to 100 GHz,A
+A working diode must have,High resistance when forward or reverse biased,"Low resistance when forward biased, while high resistance when reverse bias","High resistance when forward biased, while low resistance when reverse bias",Low resistance when forward or reverse biased,B
+What is the name of the fluorescent material that gives red colour fluorescence?,Zinc silicate.,Calcium silicate.,Zinc sulphide.,Magnesium silicate.,D
+How many bits are required to store one BCD digit ?,1,2,3,4,D
+Commutator in DC generator is used for,collecting of current,reduce losses,increase efficiency,convert AC armature current in to DC,D
+1 F is theoretically equal to,1 ohm of resistance,ratio of 1 V to 1 C,ratio of 1 C to 1 V,none of these,C
+How many entries will be in the truth table of a 3 input NAND gate ?,3,6,8,9,C
+In decimal number system what is MSD,First digit from left to right,First digit from right to left,Middle digit,Mean of all digits,A
+"In Digital Logic Designs, GAL is abbreviated as",General Advance Logic,General Array Logic,Generic Advance Logic,Generic Array Logic,D
+Inintel 8085A microprocessor ALE signal is made high to,Enable the data bus to be used as low order address bus,To latch data D0-D7 from data bus,To disable data bus,To achieve all the functions listed above,A
+For an SCR gate cathode characteristic is a straight line of 130. For triggered source volume of 15 V and allowable gate power dissipation of 0.5 W compute the gate source resistance?,111.9 ohm,11.19 ohm,108 ohm,115 ohm,A
+The concept of V/f control of inverters driving induction motors resuls in,constant torque operation,speed reversal,reduced magnetic loss,hormonic elimination,A
+"The energy stored in the magnetic field in a solenoid 30 cm long and 3 cm diameter wound with 1000 turns of wire carrying a current at 10 amp, is",0.015 joule.,0.15 joule.,0.015 joule.,1.15 joule.,B
+"While operating on variable frequency supplies, the AC motor requires variable voltage in order to",protect the insulation.,avoid effect of saturation.,improve the capabilities of the inverter.,protect thyristor from dV / dt.,B
+Which of the following windings are necessary in case of all dc machines?,closed winding,lap winding,wave winding,open type winding,A
+Relaxation Voltage controlled oscillators are used to generate,Sinusoidal wave,Triangular wave,Sawtooth wave,Both B and C,D
+The supply frequency usually employed for high frequency eddy current heating is,1 KHz.,5 KHz.,10 MHz.,10 KHz to 400 KHz.,D
+In the toggle mode a JK flip-flop has,"J = 0, K = 0.","J = 1, K = 1.","J = 0, K = 1.","J = 1, K = 0.",B
+Electric drive is becoming more and more popular because,all of below.,it provide smooth and easy control.,it is cheaper in cost.,it is simple and reliable.,A
+A step up chopper has input voltage 110 V and output voltage 150 V. The value of duty cycle is,0.32.,0.67.,0.45.,0.27.,B
+A Binary number system has how many digits.,0,1,2,10,C
+"Lowest critical frequency is due to pole and it may be present at the origin or nearer to the origin, then the type of network is",LC.,RL.,RC.,Any of the above.,C
+Advantages of open loop control system is/are,simple and economical.,accurate.,reliable.,all of the above.,A
+"The voltage induced in an inductor is represented as,",product of its inductance and current through it.,ratio of its inductance to current through it.,ratio of current through it to its inductance.,product of its inductance and rate of change of current through it.,D
+"If a Hexadecimal number needs to convert to binary. For each hexadecimal digit, there will be how many bits",1,2,4,8,C
+Induction heating takes place in,conducting but non-magnetic materials.,conducting materials which may be either magnetic or non-magentic materials.,insulating materials.,conducting and magnetic materials.,B
+In a lap winding dc machine number of conductors are 100 and number of parallel paths are 10. Find the average pitch,10,100,50,1,A
+Magnetic flux has the unit of,Newton,Ampere turn,Weber,Tesla,C
+"In balanced bridge, if the positions of detector and source are interchanged, the bridge will still remain balanced. This can be explained from which theorem",Reciprocity theorem,Thevinin's theorem,Norton's theorem,Compensation theorem,A
+A D-flip-flop is said to be transparent when,the output is LOW,the output is HIGH,the output follows clock,the output follow input,D
+A Lissajous pattern on an oscilloscope has 5 horinzontal tangencies and 2 vertical tangencies. The frequency of horizontal input is 100 Hz. The frequency of the vertical will be,500 Hz.,250 Hz.,400 Hz.,625 Hz.,B
+Speed control by variation of field flux results in,constant power drive.,constant torque drive.,variable power drive.,none of the above.,A
+Which of the following memories uses one transistor and one capacitor as basic memory unit,SRAM,DRAM,Both SRAM and DRAM,None,B
+"What will be the number of lamps, each having 300 lumens, required to obtain an average illuminance of 50 lux on a 4m * 3m rectangular room?",2,4,5,6,A
+"The output of the system has an effect upon the input quantity, then the system is a",open loop control system.,closed loop control system.,either A or B.,none of the above.,B
+"A sinusoidal signal is analog signal, because",it can have a number of values between the negative and positive peaks,it is negative for one half cycle,it is positive for one half cycle,it has positive as well as negative values,A
+FM stands for,frequent modulation.,frequency modulation.,frequency moderator.,frequent moderator.,B

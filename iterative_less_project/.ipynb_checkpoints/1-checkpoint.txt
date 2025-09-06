@@ -1,0 +1,110 @@
+bash /root/iterative_less_project/setup_env.sh
+source setup_env.sh
+source /etc/network_turbo
+
+huggingface-cli login
+
+
+export HF_ENDPOINT="https://hf-mirror.com"
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+conda clean --all -y
+
+pip cache purge
+
+
+rm -rf /root/autodl-tmp/results/*
+
+echo '' >> ~/.bashrc
+echo '# ModelScope Cache Settings for Data Disk' >> ~/.bashrc
+echo 'export MODELSCOPE_CACHE=/root/autodl-tmp/modelscope_cache' >> ~/.bashrc
+
+watch -n 1 nvidia-smi
+htop
+
+#!/bin/bash
+
+# --- 智能清理脚本 ---
+# 这个脚本会自动备份最终结果，然后清理缓存和中间文件。
+
+set -e # 如果任何命令失败，则立即退出
+
+# --- 配置区 ---
+# 你的实验输出目录 (从 config.py 获取)
+EXPERIMENT_DIR="/root/autodl-tmp/results/IterativeLess_Llama-7B_MMLU_run_final"
+# 备份目录的名称
+BACKUP_DIR_NAME="final_results_backup"
+# Hugging Face 缓存目录
+HF_CACHE_DIR="/root/autodl-tmp/huggingface_cache"
+
+echo "=========================================================="
+echo "          ✨ 实验环境智能清理脚本 ✨"
+echo "=========================================================="
+echo
+
+# --- 步骤 1: 备份最终结果 ---
+echo "➡️  步骤 1: 正在备份最终结果..."
+if [ ! -d "$EXPERIMENT_DIR" ]; then
+    echo "⚠️  警告: 实验目录不存在: $EXPERIMENT_DIR"
+else
+    BACKUP_PATH="$EXPERIMENT_DIR/$BACKUP_DIR_NAME"
+    mkdir -p "$BACKUP_PATH"
+    echo "  - 创建备份目录: $BACKUP_PATH"
+
+    # 备份所有顶层的 .json 和 .log 文件
+    find "$EXPERIMENT_DIR" -maxdepth 1 -type f \( -name "*.json" -o -name "*.log" \) -exec cp {} "$BACKUP_PATH/" \;
+    echo "  - 已备份所有顶层 JSON 和 Log 文件。"
+
+    # 备份所有策略的最后一个阶段的'evaluation_model'
+    for strategy_dir in "$EXPERIMENT_DIR"/*/; do
+        if [ -d "$strategy_dir" ]; then
+            last_phase_dir=$(find "$strategy_dir" -type d -name "phase_*" | sort -V | tail -n 1)
+            if [ -d "$last_phase_dir/evaluation_model" ]; then
+                strategy_name=$(basename "$strategy_dir")
+                echo "  - 正在备份策略 '$strategy_name' 的最终模型..."
+                cp -r "$last_phase_dir/evaluation_model" "$BACKUP_PATH/${strategy_name}_final_model"
+            fi
+        fi
+    done
+    echo "✅ 最终结果备份完成！"
+    echo
+fi
+
+# --- 步骤 2: 清理数据盘 ---
+echo "➡️  步骤 2: 正在清理数据盘..."
+
+# 删除整个实验目录 (因为我们已经备份了最重要的部分)
+if [ -d "$EXPERIMENT_DIR" ]; then
+    echo "  - 正在删除整个实验目录以释放空间: $EXPERIMENT_DIR"
+    rm -rf "$EXPERIMENT_DIR"
+    echo "  - 实验目录已删除。"
+fi
+
+# 删除 Hugging Face 缓存
+if [ -d "$HF_CACHE_DIR" ]; then
+    echo "  - 正在删除 Hugging Face 缓存: $HF_CACHE_DIR"
+    rm -rf "$HF_CACHE_DIR"
+    echo "  - Hugging Face 缓存已删除。"
+fi
+echo "✅ 数据盘清理完成！"
+echo
+
+# --- 步骤 3: 清理系统盘缓存 ---
+echo "➡️  步骤 3: 正在清理系统盘缓存..."
+
+echo "  - 正在清理 Conda 缓存..."
+conda clean --all -y > /dev/null 2>&1
+
+echo "  - 正在清理 Pip 缓存..."
+pip cache purge > /dev/null 2>&1
+
+echo "  - 正在清理 APT 缓存..."
+sudo apt-get clean > /dev/null 2>&1
+
+echo "✅ 系统盘缓存清理完成！"
+echo
+
+echo "=========================================================="
+echo "🎉 所有清理操作已完成！"
+echo "您的最终结果已备份在:"
+echo "$EXPERIMENT_DIR/$BACKUP_DIR_NAME"
+echo "=========================================================="
